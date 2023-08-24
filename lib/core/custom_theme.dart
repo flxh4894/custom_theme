@@ -68,9 +68,8 @@ class _CustomThemeState extends State<CustomTheme> with CustomThemeManager {
         final theme = DefaultColorTheme(colorPalette: colorPalette);
         return InheritedCustomTheme(
           themeManager: this,
-          themeMode: widget.initThemeMode,
+          themeMode: value,
           child: widget.builder(
-            // TODO 이걸 colorpallete 기준으로 만들어서 줘야함.
             theme.light,
             theme.dark,
             value,

@@ -24,6 +24,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomTheme(
       initThemeMode: themeMode,
+      colorPalette: ColorPalette().copyWith(
+        primary: PrimaryColor().copyWith(
+          s50: Colors.blue,
+          s40: Colors.red,
+          s30: Colors.green,
+          s99: Colors.orange,
+        ),
+      ),
       builder: (light, dark, mode) => MaterialApp(
         theme: light,
         darkTheme: dark,
@@ -54,13 +62,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   void _incrementCounter(BuildContext context) {
     CustomTheme.of(context).toggleThemeMode();
-    setState(() {
-      _counter++;
-    });
   }
 
   @override
@@ -74,44 +77,78 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                width: 150,
-                height: 150,
-                alignment: Alignment.center,
-                color: CustomTheme.of(context)
-                    .colorTokens
-                    .buttonTokens
-                    .activePrimary
-                    .container,
+              const Text("StateOverlay :: Common / Hover / Pressed / Focused"),
+              Row(
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    color:
+                        CustomTheme.of(context).colorTokens.stateOverlay.common,
+                  ),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    color:
+                        CustomTheme.of(context).colorTokens.stateOverlay.hover,
+                  ),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    color: CustomTheme.of(context)
+                        .colorTokens
+                        .stateOverlay
+                        .pressed,
+                  ),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    color: CustomTheme.of(context)
+                        .colorTokens
+                        .stateOverlay
+                        .focused,
+                  )
+                ],
+              ),
+              const Text("Buttons"),
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomTheme.of(context)
+                      .colorTokens
+                      .buttonTokens
+                      .activePrimary
+                      .container,
+                ),
                 child: Text(
-                  "Button/Active/Primary",
-                  textAlign: TextAlign.center,
+                  "BTN/Active/Primary",
                   style: TextStyle(
-                      color: CustomTheme.of(context)
-                          .colorTokens
-                          .buttonTokens
-                          .activePrimary
-                          .elements),
+                    color: CustomTheme.of(context)
+                        .colorTokens
+                        .buttonTokens
+                        .activePrimary
+                        .elements,
+                  ),
                 ),
               ),
-              Container(
-                width: 150,
-                height: 150,
-                alignment: Alignment.center,
-                color: CustomTheme.of(context)
-                    .colorTokens
-                    .buttonTokens
-                    .activeSecondary
-                    .container,
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomTheme.of(context)
+                      .colorTokens
+                      .buttonTokens
+                      .activeSecondary
+                      .container,
+                ),
                 child: Text(
-                  "Button/Active/Secondary",
-                  textAlign: TextAlign.center,
+                  "BTN/Active/Secondary",
                   style: TextStyle(
-                      color: CustomTheme.of(context)
-                          .colorTokens
-                          .buttonTokens
-                          .activeSecondary
-                          .elements),
+                    color: CustomTheme.of(context)
+                        .colorTokens
+                        .buttonTokens
+                        .activeSecondary
+                        .elements,
+                  ),
                 ),
               ),
               Container(
@@ -129,15 +166,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(color: Colors.amber),
                 ),
               ),
-              Container(
-                width: 100,
-                height: 100,
-                alignment: Alignment.center,
-                color: CustomTheme.of(context)
-                    .colorTokens
-                    .buttonTokens
-                    .activeDisabled
-                    .container,
+              ElevatedButton(
+                onPressed: null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomTheme.of(context)
+                      .colorTokens
+                      .buttonTokens
+                      .activeDisabled
+                      .container,
+                ),
                 child: Text(
                   "Button/Disabled",
                   textAlign: TextAlign.center,
@@ -148,12 +185,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         .activeDisabled
                         .elements,
                   ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text(
-                  "ElevatedButton",
                 ),
               ),
             ],

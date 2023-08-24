@@ -15,12 +15,12 @@ class ButtonActivePrimary {
 
   factory ButtonActivePrimary.light(ColorPalette p) => ButtonActivePrimary(
         elements: p.grayScale.s0,
-        container: p.primary.s30,
+        container: p.primary.s50,
       );
 
   factory ButtonActivePrimary.dark(ColorPalette p) => ButtonActivePrimary(
         elements: p.grayScale.s0,
-        container: p.primary.s30,
+        container: p.primary.s40,
       );
 }
 
@@ -37,13 +37,13 @@ class ButtonActiveSecondary {
   });
 
   factory ButtonActiveSecondary.light(ColorPalette p) => ButtonActiveSecondary(
-        elements: p.grayScale.s0,
-        container: p.primary.s50,
+        elements: p.primary.s99,
+        container: p.primary.s10,
       );
 
   factory ButtonActiveSecondary.dark(ColorPalette p) => ButtonActiveSecondary(
-        elements: p.grayScale.s0,
-        container: p.primary.s40,
+        elements: p.primary.s20,
+        container: p.primary.s99,
       );
 }
 
