@@ -1,36 +1,29 @@
 import 'package:custom_theme/core/theme_store_manager.dart';
 import 'package:custom_theme/style/color_pallete.dart';
+import 'package:custom_theme/style/color_tokens/color_tokens.dart';
+
 import 'package:flutter/material.dart';
 
 mixin CustomThemeManager {
-  late final ThemeData _lightTheme;
-  late final ThemeData _darkTheme;
   late final ValueNotifier<ThemeMode> _themeMode;
   late ColorPalette _colorPalette;
-  ThemeData get lightTheme => _lightTheme;
-  ThemeData get darkTheme => _darkTheme;
+  // ThemeData get lightTheme => _lightTheme;
+  // ThemeData get darkTheme => _darkTheme;
   ValueNotifier<ThemeMode> get themeMode => _themeMode;
   ColorPalette get colorPalette => _colorPalette;
-  // 사용자가 커스텀 컬러 팔레트를 설정하는 경우 모드에 따라 변경되지 않고 고정됨.
-  bool isUseCustomColorPalette = false;
+  ColorTokens get colorTokens => ColorTokens(
+        isDark: isDark(),
+        cp: _colorPalette,
+      );
 
   final CustomThemePreferences store = CustomThemePreferences();
 
   void initTheme({
     required ThemeMode themeMode,
-    required ThemeData light,
-    required ThemeData dark,
     ColorPalette? colorPalette,
   }) {
-    _lightTheme = light;
-    _darkTheme = dark;
-    if (colorPalette != null) {
-      _colorPalette = colorPalette;
-      isUseCustomColorPalette = true;
-    } else {
-      _selectColorPallete(themeMode);
-    }
-
+    _selectColorTokenType(themeMode);
+    _colorPalette = colorPalette ?? ColorPalette();
     _themeMode = ValueNotifier(themeMode);
   }
 
@@ -43,7 +36,7 @@ mixin CustomThemeManager {
   ///
   void setDarkTheme() {
     const mode = ThemeMode.dark;
-    _selectColorPallete(mode);
+    _selectColorTokenType(mode);
     _themeMode.value = mode;
     store.setThemeMode(mode);
   }
@@ -53,7 +46,7 @@ mixin CustomThemeManager {
   ///
   void setLightTheme() {
     const mode = ThemeMode.light;
-    _selectColorPallete(mode);
+    _selectColorTokenType(mode);
     _themeMode.value = mode;
     store.setThemeMode(mode);
   }
@@ -63,7 +56,7 @@ mixin CustomThemeManager {
   ///
   void setSystemTheme() {
     const mode = ThemeMode.system;
-    _selectColorPallete(mode);
+    _selectColorTokenType(mode);
     _themeMode.value = mode;
     store.setThemeMode(mode);
   }
@@ -72,24 +65,23 @@ mixin CustomThemeManager {
   /// Choose color pallete by theme mode.
   /// [Ligtht] or [Dark] or [UserCustom]
   ///
-  void _selectColorPallete(ThemeMode mode) {
-    if (isUseCustomColorPalette) return;
-
-    switch (mode) {
-      case ThemeMode.light:
-        _colorPalette = ColorPalette.lightTheme;
-        break;
-      case ThemeMode.dark:
-        _colorPalette = ColorPalette.darkTheme;
-        break;
-      case ThemeMode.system:
-        _colorPalette =
-            WidgetsBinding.instance.platformDispatcher.platformBrightness ==
-                    Brightness.light
-                ? ColorPalette.lightTheme
-                : ColorPalette.darkTheme;
-        break;
-    }
+  void _selectColorTokenType(ThemeMode mode) {
+    // Color Token을 변경하는 용도로 사용함
+    // switch (mode) {
+    //   case ThemeMode.light:
+    //     _colorPalette = _colorPaletteLight;
+    //     break;
+    //   case ThemeMode.dark:
+    //     _colorPalette = _colorPaletteDark;
+    //     break;
+    //   case ThemeMode.system:
+    //     _colorPalette =
+    //         WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+    //                 Brightness.light
+    //             ? _colorPaletteLight
+    //             : _colorPaletteDark;
+    //     break;
+    // }
   }
 
   ///
@@ -100,8 +92,20 @@ mixin CustomThemeManager {
     final nextModeIndex =
         (_themeMode.value.index + 1) % ThemeMode.values.length;
     final mode = ThemeMode.values[nextModeIndex];
-    _selectColorPallete(mode);
+    _selectColorTokenType(mode);
     _themeMode.value = mode;
     store.setThemeMode(_themeMode.value);
+  }
+
+  bool isDark() {
+    switch (_themeMode.value) {
+      case ThemeMode.light:
+        return false;
+      case ThemeMode.dark:
+        return true;
+      case ThemeMode.system:
+        return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark;
+    }
   }
 }

@@ -23,19 +23,12 @@ class CustomTheme extends StatefulWidget {
   /// [builder] function define.
   final ThemeBuilder builder;
 
-  /// [lightTheme] define.
-  final ThemeData? lightTheme;
-
-  /// [darkTheme] define.
-  final ThemeData? darkTheme;
-
+  /// [ColorPalette] custom colors define.
   final ColorPalette? colorPalette;
 
   const CustomTheme({
     this.initThemeMode = ThemeMode.system,
     required this.builder,
-    this.darkTheme,
-    this.lightTheme,
     this.colorPalette,
     super.key,
   });
@@ -62,8 +55,6 @@ class _CustomThemeState extends State<CustomTheme> with CustomThemeManager {
   void initState() {
     initTheme(
       themeMode: widget.initThemeMode,
-      light: widget.lightTheme ?? CustomThemeData.light,
-      dark: widget.darkTheme ?? CustomThemeData.dark,
       colorPalette: widget.colorPalette,
     );
     super.initState();
@@ -72,18 +63,21 @@ class _CustomThemeState extends State<CustomTheme> with CustomThemeManager {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
-        valueListenable: themeMode,
-        builder: (context, value, _) {
-          return InheritedCustomTheme(
-            themeManager: this,
-            themeMode: widget.initThemeMode,
-            child: widget.builder(
-              lightTheme,
-              darkTheme,
-              value,
-            ),
-          );
-        });
+      valueListenable: themeMode,
+      builder: (context, value, _) {
+        final theme = DefaultColorTheme(colorPalette: colorPalette);
+        return InheritedCustomTheme(
+          themeManager: this,
+          themeMode: widget.initThemeMode,
+          child: widget.builder(
+            // TODO 이걸 colorpallete 기준으로 만들어서 줘야함.
+            theme.light,
+            theme.dark,
+            value,
+          ),
+        );
+      },
+    );
   }
 }
 
